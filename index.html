@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>数学真题刷题工作台</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <script defer src="./data/questions.js"></script>
+  <script defer src="./data/solutions.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">Σ</div>
+        <div>
+          <div class="brand-title">数学真题刷题工作台</div>
+          <div class="brand-subtitle">本地题库 · 数学一</div>
+        </div>
+      </div>
+      <label class="search-box" aria-label="搜索题目">
+        <span>⌕</span>
+        <input id="searchInput" type="search" placeholder="搜索题目、年份、题号、知识点..." autocomplete="off">
+        <kbd>Ctrl K</kbd>
+      </label>
+      <div class="progress-chip">
+        <span>学习进度</span>
+        <div class="progress-track"><div id="topProgress" class="progress-fill"></div></div>
+        <strong id="progressText">0 / 0</strong>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <nav class="rail" aria-label="主导航">
+        <button class="rail-item active" data-view="practice" title="练习"><span>✎</span><b>练习</b></button>
+        <button class="rail-item" data-view="bank" title="题库"><span>▤</span><b>题库</b></button>
+        <button class="rail-item" data-view="review" title="错题 / 复习"><span>▣</span><b>错题 / 复习</b></button>
+        <button class="rail-item" data-view="audit" title="校对"><span>✓</span><b>校对</b></button>
+        <button class="rail-item" data-view="favorites" title="收藏"><span>☆</span><b>收藏</b></button>
+        <button class="rail-item" data-view="stats" title="统计"><span>▥</span><b>统计</b></button>
+      </nav>
+
+      <aside class="filters">
+        <div class="panel-head">
+          <h2>筛选条件</h2>
+          <button id="resetFilters" class="link-btn">重置</button>
+        </div>
+
+        <section class="filter-section">
+          <div class="section-title">科目</div>
+          <label class="check-row"><input type="checkbox" checked disabled><span>数学一</span></label>
+        </section>
+
+        <section class="filter-section">
+          <div class="section-title">年份 <button id="toggleAllYears" class="link-btn">全选</button></div>
+          <div id="yearGrid" class="year-grid"></div>
+        </section>
+
+        <section class="filter-section">
+          <div class="section-title">卷子版本</div>
+          <div id="paperFilters" class="check-list"></div>
+        </section>
+
+        <section class="filter-section">
+          <div class="section-title">题号范围</div>
+          <div class="range-row">
+            <input id="qStart" type="number" min="1" value="1">
+            <span>至</span>
+            <input id="qEnd" type="number" min="1" value="23">
+          </div>
+        </section>
+
+        <section class="filter-section">
+          <div class="section-title">状态</div>
+          <div class="check-list">
+            <label class="check-row"><input class="status-filter" type="checkbox" value="unseen" checked><span>未做</span></label>
+            <label class="check-row"><input class="status-filter" type="checkbox" value="done" checked><span>已做</span></label>
+            <label class="check-row"><input class="status-filter" type="checkbox" value="wrong" checked><span>错题</span></label>
+            <label class="check-row"><input class="status-filter" type="checkbox" value="favorite" checked><span>收藏</span></label>
+            <label class="check-row"><input class="status-filter" type="checkbox" value="review" checked><span>待复习</span></label>
+            <label class="check-row"><input class="status-filter" type="checkbox" value="manual_check" checked><span>需校对</span></label>
+          </div>
+        </section>
+
+        <section class="filter-section">
+          <div class="section-title">标签</div>
+          <div id="tagFilters" class="tag-filter-list"></div>
+        </section>
+      </aside>
+
+      <section class="content">
+        <section id="practiceView" class="view active">
+          <div class="question-card">
+            <div class="question-toolbar">
+              <div>
+                <div class="meta-line" id="questionMeta">数学一</div>
+                <h1 id="questionTitle">载入中...</h1>
+              </div>
+              <div class="toolbar-actions">
+                <button id="prevQuestion" class="secondary-btn">‹ 上一题</button>
+                <button id="nextQuestion" class="primary-btn">下一题 ›</button>
+                <button id="randomQuestion" class="secondary-btn">↝ 随机一题</button>
+              </div>
+            </div>
+            <div class="question-tabs" role="tablist" aria-label="题目内容切换">
+              <button class="question-tab active" data-question-tab="question">题目</button>
+              <button class="question-tab" data-question-tab="solution">解析</button>
+              <button class="question-tab" data-question-tab="record">我的记录</button>
+            </div>
+            <div id="qualityBanner" class="quality-banner hidden">此题或解析标记为需人工核对，建议结合原 PDF、源 Markdown 或 OCR 后再长期使用。</div>
+            <article id="questionBody" class="question-body"></article>
+            <div class="question-footer">
+              <button id="openSource" class="secondary-btn">打开源文件位置</button>
+              <button id="openSolutionSource" class="secondary-btn">打开解析源文件</button>
+              <button id="copyQuestionId" class="secondary-btn">复制题目 ID</button>
+              <button id="fullscreenReading" class="secondary-btn">专注阅读</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="bankView" class="view">
+          <div class="table-card">
+            <div class="table-head">
+              <div>
+                <div class="meta-line">题库</div>
+                <h1>题目清单</h1>
+                <div id="tableSummary" class="meta-line">正在载入题目</div>
+              </div>
+              <button id="refreshTable" class="secondary-btn">刷新列表</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>年份</th>
+                    <th>卷子</th>
+                    <th>题号</th>
+                    <th>状态</th>
+                    <th>质量</th>
+                    <th>解析</th>
+                    <th>标签</th>
+                    <th>最近保存</th>
+                  </tr>
+                </thead>
+                <tbody id="questionTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="reviewView" class="view">
+          <div class="review-layout">
+            <div class="table-card">
+              <div class="table-head">
+                <div>
+                  <div class="meta-line">错题 / 待复习</div>
+                  <h1>复习队列</h1>
+                </div>
+              </div>
+              <div id="reviewList" class="review-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="auditView" class="view">
+          <div class="audit-grid">
+            <div class="table-card audit-list-card">
+              <div class="table-head">
+                <div>
+                  <div class="meta-line">校对工作台</div>
+                  <h1>题目与解析校对</h1>
+                  <div id="auditSummary" class="meta-line">正在统计校对任务</div>
+                </div>
+                <div class="toolbar-actions">
+                  <select id="auditFilter" class="compact-select">
+                    <option value="pending">待处理</option>
+                    <option value="manual">需校对</option>
+                    <option value="missing">待补写</option>
+                    <option value="needs_fix">需修正</option>
+                    <option value="fixed">已补写</option>
+                    <option value="confirmed">已确认</option>
+                    <option value="all">全部</option>
+                  </select>
+                  <button id="exportAudit" class="secondary-btn">导出校对记录</button>
+                </div>
+              </div>
+              <div class="audit-stat-grid">
+                <div><span>待处理</span><strong id="auditPendingCount">0</strong></div>
+                <div><span>需校对</span><strong id="auditManualCount">0</strong></div>
+                <div><span>待补写</span><strong id="auditMissingCount">0</strong></div>
+                <div><span>已处理</span><strong id="auditDoneCount">0</strong></div>
+              </div>
+              <div id="auditList" class="review-list"></div>
+            </div>
+
+            <div class="question-card audit-detail-card">
+              <div class="question-toolbar">
+                <div>
+                  <div id="auditMeta" class="meta-line">选择一道题开始校对</div>
+                  <h1 id="auditTitle">校对详情</h1>
+                </div>
+                <div class="toolbar-actions">
+                  <button id="openAuditQuestion" class="primary-btn">打开练习页</button>
+                  <button id="copyAuditId" class="secondary-btn">复制 ID</button>
+                </div>
+              </div>
+              <div id="auditRiskLine" class="quality-banner hidden"></div>
+              <div class="audit-preview">
+                <section>
+                  <div class="section-title">题目</div>
+                  <article id="auditQuestionBody" class="question-body compact"></article>
+                </section>
+                <section>
+                  <div class="section-title">当前解析</div>
+                  <article id="auditSolutionBody" class="question-body compact"></article>
+                </section>
+              </div>
+              <div class="audit-editor">
+                <section class="record-section">
+                  <div class="section-title">校对备注</div>
+                  <textarea id="auditNote" placeholder="记录问题位置、来源判断、需要重 OCR 的地方"></textarea>
+                </section>
+                <section class="record-section">
+                  <div class="section-title">修正解析草稿</div>
+                  <textarea id="auditDraft" placeholder="可在这里先写修正后的解析，后续迁移进数据库"></textarea>
+                </section>
+                <div class="audit-actions">
+                  <button class="secondary-btn" data-audit-status="confirmed">标为已确认</button>
+                  <button class="secondary-btn" data-audit-status="needs_fix">标记需修正</button>
+                  <button class="secondary-btn" data-audit-status="fixed">标为已补写</button>
+                  <button id="saveAuditNote" class="save-btn">保存校对记录</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="favoritesView" class="view">
+          <div class="table-card">
+            <div class="table-head">
+              <div>
+                <div class="meta-line">收藏</div>
+                <h1>收藏题目</h1>
+              </div>
+            </div>
+            <div id="favoriteList" class="review-list"></div>
+          </div>
+        </section>
+
+        <section id="statsView" class="view">
+          <div class="stats-grid">
+            <div class="stat-card"><span>题库题量</span><strong id="statTotal">0</strong></div>
+            <div class="stat-card"><span>已做</span><strong id="statDone">0</strong></div>
+            <div class="stat-card"><span>错题</span><strong id="statWrong">0</strong></div>
+            <div class="stat-card"><span>有解析</span><strong id="statSolutions">0</strong></div>
+            <div class="stat-card"><span>需校对</span><strong id="statManual">0</strong></div>
+          </div>
+          <div class="table-card">
+            <div class="table-head">
+              <div>
+                <div class="meta-line">按年份</div>
+                <h1>完成情况</h1>
+              </div>
+            </div>
+            <div id="yearStats" class="year-stats"></div>
+          </div>
+        </section>
+      </section>
+
+      <aside class="record-panel">
+        <div class="record-head">
+          <div>
+            <h2>练习记录</h2>
+            <span id="saveState">未保存</span>
+          </div>
+          <button id="resetTimer" class="secondary-btn">重置计时</button>
+        </div>
+
+        <div class="timer-row">
+          <span>⏱</span>
+          <strong id="timer">00:00:00</strong>
+          <button id="toggleTimer" class="icon-btn" title="暂停/继续">Ⅱ</button>
+        </div>
+
+        <section class="record-section">
+          <div class="section-title">状态</div>
+          <div class="status-grid">
+            <button class="status-btn" data-status="unseen">○ 未做</button>
+            <button class="status-btn success" data-status="done">✓ 会做</button>
+            <button class="status-btn danger" data-status="wrong">× 做错</button>
+            <button class="status-btn amber" data-status="review">◷ 待复习</button>
+            <button id="favoriteBtn" class="status-btn">☆ 收藏</button>
+            <button id="manualBtn" class="status-btn purple">✐ 需校对</button>
+          </div>
+        </section>
+
+        <section class="record-section">
+          <div class="section-title">我的答案</div>
+          <textarea id="answerInput" placeholder="在此输入你的答案，支持 LaTeX 公式"></textarea>
+        </section>
+
+        <section class="record-section">
+          <div class="section-title">解题思路</div>
+          <textarea id="thoughtInput" placeholder="写下关键步骤、易错点、参数范围"></textarea>
+        </section>
+
+        <section class="record-section">
+          <div class="section-title">错题原因</div>
+          <div class="reason-grid">
+            <button class="reason-btn" data-reason="概念不清">概念不清</button>
+            <button class="reason-btn" data-reason="计算错误">计算错误</button>
+            <button class="reason-btn" data-reason="思路错误">思路错误</button>
+            <button class="reason-btn" data-reason="公式遗忘">公式遗忘</button>
+          </div>
+        </section>
+
+        <section class="record-section">
+          <div class="section-title">备注</div>
+          <textarea id="noteInput" placeholder="补充知识点、心得体会"></textarea>
+        </section>
+
+        <button id="saveRecord" class="save-btn">保存记录</button>
+        <div class="source-note" id="sourceNote">题目来源：-</div>
+      </aside>
+    </main>
+  </div>
+</body>
+</html>
