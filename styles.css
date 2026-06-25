@@ -304,6 +304,7 @@ input[type="checkbox"] {
 
 .chip,
 .tag-chip,
+.type-filter,
 .badge {
   border: 1px solid var(--line);
   background: #fff;
@@ -314,7 +315,8 @@ input[type="checkbox"] {
 }
 
 .chip.active,
-.tag-chip.active {
+.tag-chip.active,
+.type-filter.active {
   border-color: #86b7ff;
   background: var(--blue-soft);
   color: var(--blue);
@@ -353,9 +355,87 @@ textarea {
   font-size: 12px;
 }
 
+.type-filter-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.type-filter {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-start;
+  border-radius: var(--radius);
+  padding: 0 10px;
+  color: #344054;
+  font-weight: 800;
+}
+
+.type-filter span {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: var(--blue);
+}
+
 .content {
   padding: 16px;
   overflow: auto;
+}
+
+.type-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.type-board-btn {
+  min-height: 66px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: #344054;
+  padding: 12px;
+  text-align: left;
+  box-shadow: var(--shadow);
+}
+
+.type-board-btn.active {
+  border-color: #86b7ff;
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.type-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--blue);
+  border: 1px solid #cfe0ff;
+  font-weight: 900;
+}
+
+.type-board-btn strong,
+.type-board-btn small {
+  display: block;
+}
+
+.type-board-btn small {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .view {
@@ -503,6 +583,72 @@ textarea {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 12px;
+}
+
+.choice-panel {
+  margin: 4px 34px 22px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #f8fbff;
+}
+
+.choice-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.choice-head strong {
+  font-size: 15px;
+}
+
+.choice-result {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.choice-result.ok {
+  color: var(--green);
+}
+
+.choice-result.wrong {
+  color: var(--red);
+}
+
+.choice-options {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.choice-option {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  color: #344054;
+  font-weight: 900;
+}
+
+.choice-option.selected {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.choice-option.correct {
+  border-color: #75d18b;
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.choice-option.incorrect {
+  border-color: #ff9a9d;
+  background: var(--red-soft);
+  color: var(--red);
 }
 
 .solution-meta,
@@ -1213,6 +1359,34 @@ tbody tr:hover {
     overflow: visible;
   }
 
+  .type-board {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .type-board-btn {
+    min-height: 62px;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 4px;
+    text-align: center;
+  }
+
+  .type-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .type-board-btn strong {
+    font-size: 13px;
+  }
+
+  .type-board-btn small {
+    font-size: 11px;
+  }
+
   .question-card,
   .table-card {
     border-radius: 10px;
@@ -1308,6 +1482,26 @@ tbody tr:hover {
     margin: 12px auto;
   }
 
+  .choice-panel {
+    margin: 0 14px 16px;
+    padding: 12px;
+  }
+
+  .choice-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .choice-options {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .choice-option {
+    min-height: 42px;
+  }
+
   .question-body mjx-container {
     max-width: 100%;
     overflow-x: auto;
@@ -1347,6 +1541,7 @@ tbody tr:hover {
 
   .chip,
   .tag-chip,
+  .type-filter,
   .badge {
     padding: 7px 8px;
   }

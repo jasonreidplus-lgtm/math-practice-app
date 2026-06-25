@@ -85,6 +85,11 @@
         </section>
 
         <section class="filter-section">
+          <div class="section-title">题型板块</div>
+          <div id="typeFilters" class="type-filter-list"></div>
+        </section>
+
+        <section class="filter-section">
           <div class="section-title">卷子版本</div>
           <div id="paperFilters" class="check-list"></div>
         </section>
@@ -117,6 +122,8 @@
       </aside>
 
       <section class="content">
+        <div id="typeBoard" class="type-board" aria-label="题型板块"></div>
+
         <section id="practiceView" class="view active">
           <div class="question-card">
             <div class="question-toolbar">
@@ -138,8 +145,6 @@
             <div id="qualityBanner" class="quality-banner hidden">此题或解析标记为需人工核对，建议结合原 PDF、源 Markdown 或 OCR 后再长期使用。</div>
             <article id="questionBody" class="question-body"></article>
             <div class="question-footer">
-              <button id="openSource" class="secondary-btn">打开源文件位置</button>
-              <button id="openSolutionSource" class="secondary-btn">打开解析源文件</button>
               <button id="copyQuestionId" class="secondary-btn">复制题目 ID</button>
               <button id="fullscreenReading" class="secondary-btn">专注阅读</button>
             </div>
@@ -162,6 +167,7 @@
                   <tr>
                     <th>年份</th>
                     <th>卷子</th>
+                    <th>题型</th>
                     <th>题号</th>
                     <th>状态</th>
                     <th>质量</th>
@@ -351,7 +357,6 @@
         </section>
 
         <button id="saveRecord" class="save-btn">保存记录</button>
-        <div class="source-note" id="sourceNote">题目来源：-</div>
       </aside>
     </main>
     <div id="mobileOverlay" class="mobile-overlay" aria-hidden="true"></div>

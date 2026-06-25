@@ -1,4 +1,4 @@
-const CACHE_NAME = "math1-practice-pages-v1";
+const CACHE_NAME = "math1-practice-pages-v2";
 
 const CORE_ASSETS = [
   "./",

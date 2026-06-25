@@ -12,6 +12,7 @@ const app = {
   selectedYears: new Set(),
   selectedPapers: new Set(),
   selectedTags: new Set(),
+  selectedTypes: new Set(["choice", "blank", "essay"]),
   selectedStatuses: new Set(["unseen", "done", "wrong", "favorite", "review", "manual_check"]),
   qStart: 1,
   qEnd: 23,
@@ -33,6 +34,12 @@ const tags = [
   { name: "概率", patterns: ["概率", "随机变量", "密度", "分布"] },
   { name: "微分方程", patterns: ["微分方程"] },
   { name: "多元函数", patterns: ["二重积分", "曲面积分", "偏导数"] }
+];
+
+const questionTypes = [
+  { key: "choice", label: "选择题", short: "选择", icon: "A" },
+  { key: "blank", label: "填空题", short: "填空", icon: "□" },
+  { key: "essay", label: "大题", short: "大题", icon: "∑" }
 ];
 
 const $ = (selector) => document.querySelector(selector);
@@ -62,13 +69,57 @@ function init() {
 
 function enrichQuestion(question) {
   const content = question.content_md || "";
+  const inline = splitInlineContent(content);
+  const type = inferQuestionType(question, inline.question);
   return {
     ...question,
     year: Number(question.year),
     question_no: Number(question.question_no),
+    question_stem_md: inline.question,
+    inline_solution_md: inline.solution,
+    question_type: type,
     inferred_tags: inferTags(content),
-    search_text: `${question.year} ${question.paper} 第${question.question_no}题 ${content}`.toLowerCase()
+    search_text: `${question.year} ${question.paper} 第${question.question_no}题 ${content} ${typeText(type)}`.toLowerCase()
   };
+}
+
+function splitInlineContent(content) {
+  const normalized = String(content || "").replace(/\r\n/g, "\n").trim();
+  const marker = normalized.search(/(?:^|\n)\s*(?:【答案】|答案\s*[:：]|【解析】|解析\s*[:：]|【解】|解\s*[:：])/m);
+  if (marker < 0) {
+    const solveMarker = normalized.search(/(?:^|\n)\s*解[:：]/m);
+    if (solveMarker < 0) return { question: normalized, solution: "" };
+    return {
+      question: normalized.slice(0, solveMarker).trim(),
+      solution: normalized.slice(solveMarker).trim()
+    };
+  }
+  return {
+    question: normalized.slice(0, marker).trim(),
+    solution: normalized.slice(marker).trim()
+  };
+}
+
+function inferQuestionType(question, stem) {
+  if (hasChoiceOptions(stem)) return "choice";
+  if (isBlankQuestion(question, stem)) return "blank";
+  return "essay";
+}
+
+function hasChoiceOptions(stem) {
+  const text = String(stem || "");
+  const labels = new Set();
+  const optionRe = /(?:^|\n|\s)(?:[（(]\s*([A-D])\s*[）)]|([A-D])\s*[．.、])/g;
+  let match;
+  while ((match = optionRe.exec(text))) {
+    labels.add(match[1] || match[2]);
+  }
+  return labels.size >= 3;
+}
+
+function isBlankQuestion(question, stem) {
+  const text = `${question.paper || ""}\n${stem || ""}`;
+  return /填空题|_{3,}|____|underline|\\underline|\\qquad|应填|填\s*[:：]/.test(text);
 }
 
 function inferTags(content) {
@@ -85,6 +136,7 @@ function hydrateFilters() {
   years.forEach((year) => app.selectedYears.add(year));
   papers.forEach((paper) => app.selectedPapers.add(paper));
   tags.forEach((tag) => app.selectedTags.add(tag.name));
+  questionTypes.forEach((type) => app.selectedTypes.add(type.key));
 
   $("#yearGrid").innerHTML = years.map((year) => (
     `<button class="chip active" data-year="${year}">${year}</button>`
@@ -92,6 +144,10 @@ function hydrateFilters() {
 
   $("#paperFilters").innerHTML = papers.map((paper) => (
     `<label class="check-row"><input class="paper-filter" type="checkbox" value="${escapeAttr(paper)}" checked><span>${escapeHtml(paper)}</span></label>`
+  )).join("");
+
+  $("#typeFilters").innerHTML = questionTypes.map((type) => (
+    `<button class="type-filter active" data-type="${type.key}"><span>${type.icon}</span>${type.label}</button>`
   )).join("");
 
   $("#tagFilters").innerHTML = tags.map((tag) => (
@@ -169,6 +225,22 @@ function bindEvents() {
     renderCurrentSafe();
   });
 
+  $("#typeFilters").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-type]");
+    if (!button) return;
+    toggleQuestionType(button.dataset.type);
+  });
+
+  $("#typeBoard").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-type]");
+    if (!button) return;
+    const type = button.dataset.type;
+    app.selectedTypes = new Set([type]);
+    syncTypeControls();
+    applyFilters();
+    renderCurrentSafe();
+  });
+
   $("#qStart").addEventListener("change", syncRange);
   $("#qEnd").addEventListener("change", syncRange);
 
@@ -183,6 +255,11 @@ function bindEvents() {
   $("#prevQuestion").addEventListener("click", goPrev);
   $("#nextQuestion").addEventListener("click", goNext);
   $("#randomQuestion").addEventListener("click", goRandom);
+  $("#questionBody").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-choice-answer]");
+    if (!button) return;
+    chooseOption(button.dataset.choiceAnswer);
+  });
   $("#refreshTable").addEventListener("click", () => renderBank());
   $("#saveRecord").addEventListener("click", saveCurrentRecord);
   $("#auditFilter").addEventListener("change", (event) => {
@@ -252,8 +329,6 @@ function bindEvents() {
   });
 
   $("#copyQuestionId").addEventListener("click", copyCurrentId);
-  $("#openSource").addEventListener("click", openCurrentSource);
-  $("#openSolutionSource").addEventListener("click", openCurrentSolutionSource);
   $("#fullscreenReading").addEventListener("click", () => {
     document.body.classList.toggle("reading-focus");
     $("#fullscreenReading").textContent = document.body.classList.contains("reading-focus") ? "退出专注" : "专注阅读";
@@ -297,6 +372,7 @@ function applyFilters() {
     const searchMatch = !app.search || question.search_text.includes(app.search) || question.question_id.includes(app.search);
     return app.selectedYears.has(question.year) &&
       app.selectedPapers.has(question.paper) &&
+      app.selectedTypes.has(question.question_type) &&
       question.question_no >= app.qStart &&
       question.question_no <= app.qEnd &&
       statusMatch &&
@@ -305,11 +381,27 @@ function applyFilters() {
   }).sort(sortQuestions);
 }
 
+function toggleQuestionType(type) {
+  toggleSet(app.selectedTypes, type);
+  if (!app.selectedTypes.size) app.selectedTypes.add(type);
+  syncTypeControls();
+  applyFilters();
+  renderCurrentSafe();
+}
+
+function syncTypeControls() {
+  $$(".type-filter, .type-board-btn").forEach((button) => {
+    const active = app.selectedTypes.has(button.dataset.type);
+    button.classList.toggle("active", active);
+  });
+}
+
 function sortQuestions(a, b) {
   return a.year - b.year || a.paper.localeCompare(b.paper, "zh-CN") || a.question_no - b.question_no;
 }
 
 function renderAll() {
+  renderTypeBoard();
   renderCurrentQuestion();
   renderRecordPanel();
   renderTopProgress();
@@ -318,6 +410,26 @@ function renderAll() {
   renderAudit();
   renderFavorites();
   renderStats();
+}
+
+function renderTypeBoard() {
+  const selectedYears = app.selectedYears;
+  const selectedPapers = app.selectedPapers;
+  const baseQuestions = app.questions.filter((question) => (
+    selectedYears.has(question.year) &&
+    selectedPapers.has(question.paper) &&
+    question.question_no >= app.qStart &&
+    question.question_no <= app.qEnd
+  ));
+  $("#typeBoard").innerHTML = questionTypes.map((type) => {
+    const total = app.questions.filter((question) => question.question_type === type.key).length;
+    const visible = baseQuestions.filter((question) => question.question_type === type.key).length;
+    const active = app.selectedTypes.has(type.key);
+    return `<button class="type-board-btn ${active ? "active" : ""}" data-type="${type.key}">
+      <span class="type-icon">${type.icon}</span>
+      <span><strong>${type.label}</strong><small>${visible} / ${total} 题</small></span>
+    </button>`;
+  }).join("");
 }
 
 function renderCurrentSafe() {
@@ -335,14 +447,12 @@ function renderCurrentQuestion() {
     $("#questionMeta").textContent = "请调整筛选条件";
     $("#questionBody").innerHTML = `<div class="empty-state">当前筛选条件下没有题目。</div>`;
     $("#qualityBanner").classList.add("hidden");
-    $("#sourceNote").textContent = "题目来源：-";
     return;
   }
   localStorage.setItem("math1-current-question", question.question_id);
-  $("#questionMeta").textContent = `${question.year} 年 · 数学一 · ${question.paper}`;
+  $("#questionMeta").textContent = `${question.year} 年 · 数学一 · ${question.paper} · ${typeText(question.question_type)}`;
   $("#questionTitle").textContent = `${question.year} 数学一 ${question.paper} 第${pad2(question.question_no)}题`;
   renderQuestionTabContent(question);
-  $("#sourceNote").textContent = `题目来源：${displaySourcePath(question.source_path, question)}`;
   renderQualityBanner();
   typesetMath();
 }
@@ -362,7 +472,7 @@ function renderQuestionTabContent(question) {
     return;
   }
 
-  $("#questionBody").innerHTML = renderMarkdown(question.content_md || "", question);
+  $("#questionBody").innerHTML = renderMarkdown(question.question_stem_md || question.content_md || "", question) + renderChoiceInteraction(question);
 }
 
 function renderQualityBanner() {
@@ -372,26 +482,102 @@ function renderQualityBanner() {
   $("#qualityBanner").classList.toggle("hidden", !flagged);
 }
 
+function renderChoiceInteraction(question) {
+  if (question.question_type !== "choice") return "";
+  const record = currentRecord(false);
+  const selected = record.choiceAnswer || normalizeChoice(record.answer);
+  const correct = correctChoice(question);
+  const result = selected && correct
+    ? (selected === correct ? `<span class="choice-result ok">回答正确</span>` : `<span class="choice-result wrong">正确答案：${correct}</span>`)
+    : selected ? `<span class="choice-result">已选择 ${selected}</span>` : "";
+  return `<section class="choice-panel">
+    <div class="choice-head">
+      <strong>选择答案</strong>
+      ${result}
+    </div>
+    <div class="choice-options">
+      ${["A", "B", "C", "D"].map((letter) => {
+        const classes = [
+          "choice-option",
+          selected === letter ? "selected" : "",
+          selected && correct && letter === correct ? "correct" : "",
+          selected && correct && selected === letter && selected !== correct ? "incorrect" : ""
+        ].filter(Boolean).join(" ");
+        return `<button class="${classes}" data-choice-answer="${letter}" type="button">${letter}</button>`;
+      }).join("")}
+    </div>
+  </section>`;
+}
+
+function chooseOption(letter) {
+  const question = currentQuestion();
+  if (!question || question.question_type !== "choice") return;
+  const choice = normalizeChoice(letter);
+  if (!choice) return;
+  const record = currentRecord();
+  const correct = correctChoice(question);
+  record.choiceAnswer = choice;
+  record.answer = choice;
+  if (correct) {
+    record.status = choice === correct ? "done" : "wrong";
+  } else if (!record.status || record.status === "unseen") {
+    record.status = "done";
+  }
+  saveRecordObject(record);
+  renderQuestionTabContent(question);
+  renderRecordPanel();
+  renderTopProgress();
+  renderBank();
+  renderReview();
+  renderStats();
+  setSaveState(correct ? (choice === correct ? "选择题已保存：正确" : `选择题已保存：应为 ${correct}`) : "选择题答案已保存");
+  typesetMath();
+}
+
+function correctChoice(question) {
+  const candidates = [
+    question.inline_solution_md || "",
+    currentSolution(question)?.content_md || "",
+    question.content_md || ""
+  ].join("\n");
+  const match = candidates.match(/(?:【答案】|答案\s*[:：]?)\s*[（(]?\s*([A-D])\s*[）)]?/i);
+  return normalizeChoice(match?.[1] || "");
+}
+
+function normalizeChoice(value) {
+  const match = String(value || "").toUpperCase().match(/[A-D]/);
+  return match ? match[0] : "";
+}
+
 function renderSolutionPanel(question) {
   const solution = currentSolution(question);
+  const inlineSolution = currentInlineSolution(question);
   if (!solution) {
-    const source = currentSolutionSource(question);
+    if (inlineSolution) {
+      $("#questionBody").innerHTML = `<div class="solution-meta"><strong>解析来源：</strong>题目内置答案/解析</div>` +
+        renderMarkdown(inlineSolution, question);
+      return;
+    }
     $("#questionBody").innerHTML = `<div class="empty-state">
       <h2>暂未匹配到本题解析</h2>
-      <p>已找到的解析文件格式可能未能按题号自动切开。可以先打开整年解析源文件查看。</p>
-      ${source ? `<div class="file-path">${escapeHtml(source)}</div>` : "<p>当前年份暂未发现解析源文件。</p>"}
+      <p>当前题目没有题目级解析，也没有识别到题内解析。</p>
     </div>`;
     return;
   }
 
   const mapMethod = solution.map_method ? `<br><strong>映射方式：</strong>${escapeHtml(solution.map_method)}` : "";
+  const inlineBlock = inlineSolution ? `<div class="solution-meta"><strong>题内答案/解析：</strong>已识别</div>${renderMarkdown(inlineSolution, question)}` : "";
   const meta = `<div class="solution-meta">
     <strong>解析来源：</strong>${escapeHtml(displaySourcePath(solution.source_path))}<br>
     <strong>质量状态：</strong>${solution.quality_status === "manual_check" ? "需人工核对" : "ok"}${mapMethod}
   </div>`;
-  $("#questionBody").innerHTML = meta + renderMarkdown(solution.content_md || "", {
+  $("#questionBody").innerHTML = inlineBlock + meta + renderMarkdown(solution.content_md || "", {
     source_path: solution.source_path
   });
+}
+
+function currentInlineSolution(question = currentQuestion()) {
+  return question?.inline_solution_md || "";
 }
 
 function renderRecordSummary() {
@@ -450,6 +636,7 @@ function renderBank() {
     return `<tr data-id="${question.question_id}">
       <td>${question.year}</td>
       <td>${escapeHtml(question.paper)}</td>
+      <td>${typeBadge(question.question_type)}</td>
       <td>第${pad2(question.question_no)}题</td>
       <td>${statusBadge(status, record.favorite)}</td>
       <td>${qualityBadge(question, record)}</td>
@@ -458,7 +645,7 @@ function renderBank() {
       <td>${record.updatedAt ? formatTime(record.updatedAt) : "-"}</td>
     </tr>`;
   }).join("");
-  $("#questionTable").innerHTML = rows || `<tr><td colspan="8"><div class="empty-state">没有匹配题目。</div></td></tr>`;
+  $("#questionTable").innerHTML = rows || `<tr><td colspan="9"><div class="empty-state">没有匹配题目。</div></td></tr>`;
   $("#questionTable").onclick = (event) => {
     const row = event.target.closest("tr[data-id]");
     if (!row) return;
@@ -869,12 +1056,6 @@ function currentSolution(question = currentQuestion()) {
   return null;
 }
 
-function currentSolutionSource(question = currentQuestion()) {
-  if (!question || !window.SOLUTION_SOURCES) return "";
-  const solution = currentSolution(question);
-  return solution?.source_path || window.SOLUTION_SOURCES[String(question.year)] || "";
-}
-
 function currentRecord(create = true) {
   const question = currentQuestion();
   if (!question) return {};
@@ -911,6 +1092,7 @@ function resetFilters() {
   app.selectedYears = new Set(app.questions.map((q) => q.year));
   app.selectedPapers = new Set(app.questions.map((q) => q.paper));
   app.selectedTags = new Set(tags.map((tag) => tag.name));
+  app.selectedTypes = new Set(questionTypes.map((type) => type.key));
   app.selectedStatuses = new Set(["unseen", "done", "wrong", "favorite", "review", "manual_check"]);
   app.qStart = 1;
   app.qEnd = app.maxQuestionNo;
@@ -918,7 +1100,7 @@ function resetFilters() {
   $("#searchInput").value = "";
   $("#qStart").value = 1;
   $("#qEnd").value = app.maxQuestionNo;
-  $$(".chip[data-year], .tag-chip[data-tag]").forEach((button) => button.classList.add("active"));
+  $$(".chip[data-year], .tag-chip[data-tag], .type-filter, .type-board-btn").forEach((button) => button.classList.add("active"));
   $$(".paper-filter, .status-filter").forEach((input) => { input.checked = true; });
   applyFilters();
   renderCurrentSafe();
@@ -963,43 +1145,10 @@ function copyCurrentId() {
   setSaveState("题目 ID 已复制");
 }
 
-function openCurrentSource() {
-  const question = currentQuestion();
-  const source = question?.source_path;
-  if (!source) return;
-  if (isHostedPage()) {
-    copyText(displaySourcePath(source, question));
-    setSaveState("网页模式不能打开本机文件，已复制源路径");
-    return;
-  }
-  window.open(toFileUrl(source), "_blank");
-}
-
-function openCurrentSolutionSource() {
-  const source = currentSolutionSource();
-  if (!source) return;
-  if (isHostedPage()) {
-    copyText(displaySourcePath(source));
-    setSaveState("网页模式不能打开本机文件，已复制解析路径");
-    return;
-  }
-  window.open(toFileUrl(source), "_blank");
-}
-
-function isHostedPage() {
-  return location.protocol === "http:" || location.protocol === "https:";
-}
-
 function displaySourcePath(source, question = {}) {
   if (question.relative_source_path) return question.relative_source_path;
   if (!source) return "-";
   return String(source).replace(/^.*?按年份整理[\\/]/, "按年份整理\\");
-}
-
-function copyText(text) {
-  if (navigator.clipboard?.writeText) {
-    navigator.clipboard.writeText(text).catch(() => {});
-  }
 }
 
 function setSaveState(text) {
@@ -1022,6 +1171,14 @@ function solutionBadge(question) {
   return solution.quality_status === "manual_check"
     ? `<span class="badge warn">需校对</span>`
     : `<span class="badge ok">有解析</span>`;
+}
+
+function typeText(type) {
+  return questionTypes.find((item) => item.key === type)?.label || "大题";
+}
+
+function typeBadge(type) {
+  return `<span class="badge blue">${typeText(type)}</span>`;
 }
 
 function auditStatusBadge(status) {
