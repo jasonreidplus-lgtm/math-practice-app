@@ -36,6 +36,10 @@
         <div class="progress-track"><div id="topProgress" class="progress-fill"></div></div>
         <strong id="progressText">0 / 0</strong>
       </div>
+      <div class="mobile-actions" aria-label="手机端工具">
+        <button id="mobileFilterToggle" class="secondary-btn" type="button">筛选</button>
+        <button id="mobileRecordToggle" class="primary-btn" type="button">记录</button>
+      </div>
     </header>
 
     <main class="workspace">
@@ -51,7 +55,10 @@
       <aside class="filters">
         <div class="panel-head">
           <h2>筛选条件</h2>
-          <button id="resetFilters" class="link-btn">重置</button>
+          <div class="panel-actions">
+            <button id="resetFilters" class="link-btn">重置</button>
+            <button class="mobile-close-btn" type="button" data-mobile-close aria-label="关闭筛选面板">×</button>
+          </div>
         </div>
 
         <section class="filter-section">
@@ -281,7 +288,10 @@
             <h2>练习记录</h2>
             <span id="saveState">未保存</span>
           </div>
-          <button id="resetTimer" class="secondary-btn">重置计时</button>
+          <div class="panel-actions">
+            <button id="resetTimer" class="secondary-btn">重置计时</button>
+            <button class="mobile-close-btn" type="button" data-mobile-close aria-label="关闭记录面板">×</button>
+          </div>
         </div>
 
         <div class="timer-row">
@@ -331,6 +341,7 @@
         <div class="source-note" id="sourceNote">题目来源：-</div>
       </aside>
     </main>
+    <div id="mobileOverlay" class="mobile-overlay" aria-hidden="true"></div>
   </div>
 </body>
 </html>

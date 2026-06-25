@@ -104,6 +104,13 @@ function bindEvents() {
     button.addEventListener("click", () => switchView(button.dataset.view));
   });
 
+  $("#mobileFilterToggle")?.addEventListener("click", () => openMobilePanel("filters"));
+  $("#mobileRecordToggle")?.addEventListener("click", () => openMobilePanel("record"));
+  $("#mobileOverlay")?.addEventListener("click", closeMobilePanels);
+  $$(".mobile-close-btn").forEach((button) => {
+    button.addEventListener("click", closeMobilePanels);
+  });
+
   $$(".question-tab").forEach((button) => {
     button.addEventListener("click", () => {
       app.questionTab = button.dataset.questionTab;
@@ -124,6 +131,11 @@ function bindEvents() {
     }
     if (event.key === "ArrowRight" && app.view === "practice") goNext();
     if (event.key === "ArrowLeft" && app.view === "practice") goPrev();
+    if (event.key === "Escape") closeMobilePanels();
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 720) closeMobilePanels();
   });
 
   $("#resetFilters").addEventListener("click", resetFilters);
@@ -249,6 +261,7 @@ function bindEvents() {
 }
 
 function switchView(view) {
+  closeMobilePanels();
   app.view = view;
   document.body.classList.toggle("audit-mode", view === "audit");
   $$(".rail-item").forEach((item) => item.classList.toggle("active", item.dataset.view === view));
@@ -259,6 +272,17 @@ function switchView(view) {
   if (view === "audit") renderAudit();
   if (view === "favorites") renderFavorites();
   if (view === "stats") renderStats();
+}
+
+function openMobilePanel(panel) {
+  document.body.classList.toggle("mobile-filters-open", panel === "filters");
+  document.body.classList.toggle("mobile-record-open", panel === "record");
+  $("#mobileOverlay")?.setAttribute("aria-hidden", "false");
+}
+
+function closeMobilePanels() {
+  document.body.classList.remove("mobile-filters-open", "mobile-record-open");
+  $("#mobileOverlay")?.setAttribute("aria-hidden", "true");
 }
 
 function applyFilters() {

@@ -14,6 +14,7 @@
 
 - 读取本地题目数据：`data\questions.js`
 - 三栏练习界面：左侧筛选、中间题目、右侧练习记录
+- 手机端布局：单栏刷题、底部导航、筛选/记录底部抽屉
 - 题库表格
 - 错题 / 待复习队列
 - 校对工作台：集中处理需校对、待补写、修正解析草稿
@@ -65,12 +66,16 @@ SQLite 种子 SQL：
 ## 验证记录
 
 - 已用 Edge headless 做桌面渲染烟测。
+- 已用 Edge DevTools 协议做 390px 手机视口烟测。
 - 截图位置：`docs\smoke-desktop.png`
+- 手机首屏截图位置：`docs\mobile-practice-cdp.png`
+- 手机筛选抽屉截图位置：`docs\mobile-filter-drawer.png`
+- 手机记录抽屉截图位置：`docs\mobile-record-drawer.png`
 - 解析页截图位置：`docs\smoke-audited.png`
 - 校对页截图位置：`docs\smoke-audit-workbench.png`
 - 数据加载结果：930 条题目。
 - 解析加载结果：819 个年份题号解析键，893 条题目级解析映射。
-- 当前质量审核：37 条待补写 / 待匹配，142 条需校对。
+- 当前质量审核：37 条待补写 / 待匹配，161 条需校对。
 - 质量审核报告：`docs\quality-audit.md`
 - 重新生成质量审核：`node tools\audit-quality.js`
 - 重新生成 SQLite 种子数据：`node tools\export-sqlite-seed.js`
