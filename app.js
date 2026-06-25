@@ -342,7 +342,7 @@ function renderCurrentQuestion() {
   $("#questionMeta").textContent = `${question.year} 年 · 数学一 · ${question.paper}`;
   $("#questionTitle").textContent = `${question.year} 数学一 ${question.paper} 第${pad2(question.question_no)}题`;
   renderQuestionTabContent(question);
-  $("#sourceNote").textContent = `题目来源：${question.source_path}`;
+  $("#sourceNote").textContent = `题目来源：${displaySourcePath(question.source_path, question)}`;
   renderQualityBanner();
   typesetMath();
 }
@@ -386,7 +386,7 @@ function renderSolutionPanel(question) {
 
   const mapMethod = solution.map_method ? `<br><strong>映射方式：</strong>${escapeHtml(solution.map_method)}` : "";
   const meta = `<div class="solution-meta">
-    <strong>解析来源：</strong>${escapeHtml(solution.source_path)}<br>
+    <strong>解析来源：</strong>${escapeHtml(displaySourcePath(solution.source_path))}<br>
     <strong>质量状态：</strong>${solution.quality_status === "manual_check" ? "需人工核对" : "ok"}${mapMethod}
   </div>`;
   $("#questionBody").innerHTML = meta + renderMarkdown(solution.content_md || "", {
@@ -556,7 +556,7 @@ function renderAuditDetail(question) {
 function renderAuditSolution(solution) {
   const score = solution.match_score === null || solution.match_score === undefined ? "-" : solution.match_score;
   const meta = `<div class="solution-meta">
-    <strong>来源：</strong>${escapeHtml(solution.source_path || "-")}<br>
+    <strong>来源：</strong>${escapeHtml(displaySourcePath(solution.source_path))}<br>
     <strong>质量：</strong>${solution.quality_status === "manual_check" ? "需人工核对" : "ok"}<br>
     <strong>映射：</strong>${escapeHtml(solution.map_method || "-")}，chunk=${escapeHtml(solution.chunk_no ?? "-")}，score=${escapeHtml(score)}
   </div>`;
@@ -747,6 +747,7 @@ function renderMarkdown(markdown, question) {
 
 function resolveAsset(src, question) {
   if (/^[a-z]+:/i.test(src) || src.startsWith("/")) return src;
+  if (src.startsWith("assets/") || src.startsWith("./assets/")) return src;
   const sourcePath = (question.source_path || "").replace(/\\/g, "/");
   const base = sourcePath.endsWith(".md") ? sourcePath.replace(/\/[^/]+\.md$/, "") : sourcePath;
   return toFileUrl(`${base}/${src}`.replace(/\/\.\//g, "/"));
@@ -963,15 +964,42 @@ function copyCurrentId() {
 }
 
 function openCurrentSource() {
-  const source = currentQuestion()?.source_path;
+  const question = currentQuestion();
+  const source = question?.source_path;
   if (!source) return;
+  if (isHostedPage()) {
+    copyText(displaySourcePath(source, question));
+    setSaveState("网页模式不能打开本机文件，已复制源路径");
+    return;
+  }
   window.open(toFileUrl(source), "_blank");
 }
 
 function openCurrentSolutionSource() {
   const source = currentSolutionSource();
   if (!source) return;
+  if (isHostedPage()) {
+    copyText(displaySourcePath(source));
+    setSaveState("网页模式不能打开本机文件，已复制解析路径");
+    return;
+  }
   window.open(toFileUrl(source), "_blank");
+}
+
+function isHostedPage() {
+  return location.protocol === "http:" || location.protocol === "https:";
+}
+
+function displaySourcePath(source, question = {}) {
+  if (question.relative_source_path) return question.relative_source_path;
+  if (!source) return "-";
+  return String(source).replace(/^.*?按年份整理[\\/]/, "按年份整理\\");
+}
+
+function copyText(text) {
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(text).catch(() => {});
+  }
 }
 
 function setSaveState(text) {

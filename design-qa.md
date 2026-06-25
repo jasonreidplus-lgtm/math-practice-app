@@ -16,6 +16,7 @@ final result: passed
 - Mobile navigation: six bottom navigation items are visible.
 - Mobile tools: 筛选 and 记录 open as bottom drawers with overlay and close controls.
 - Math content: long formulas stay within the page; formula area can scroll horizontally when needed.
+- GitHub Pages mode: manifest is present, service worker registers, source paths render as relative paths.
 
 ## Evidence
 
@@ -23,6 +24,7 @@ final result: passed
 - `docs/mobile-filter-drawer.png`
 - `docs/mobile-record-drawer.png`
 - `docs/desktop-after-mobile.png`
+- `docs/pages-mobile-check.png`
 
 ## Notes
 
