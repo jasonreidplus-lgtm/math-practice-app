@@ -1,0 +1,1016 @@
+{
+  "counts": {
+    "total": 930,
+    "type": {
+      "choice": 287,
+      "blank": 195,
+      "essay": 448
+    },
+    "inlineSolution": 71,
+    "solutionMapped": 893,
+    "recoveredStems": 11,
+    "contentOverrides": 1,
+    "imageRefs": 30,
+    "publicImageRefs": 30
+  },
+  "bySeverity": {
+    "P2": 116
+  },
+  "issues": [
+    {
+      "severity": "P2",
+      "id": "math1_1987_main_q13",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1987_main_q13",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "C",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1988_main_q23",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1989_main_q07",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1989_main_q07",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "C",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1989_main_q09",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1989_main_q09",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "B",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1991_main_q09",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1991_main_q09",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "A",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1991_main_q10",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1991_main_q10",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "D",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1991_main_q22",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1992_main_q10",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1992_main_q10",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "A",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1993_main_q08",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1993_main_q08",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "C",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1993_main_q10",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1993_main_q10",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "C",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1993_main_q23",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1993_main_q24",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1995_main_q06",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1995_main_q06",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "C",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1995_main_q07",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1995_main_q07",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "B",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1996_main_q06",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1996_main_q06",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "D",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1996_main_q23",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1997_main_q10",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1997_main_q10",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "D",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1997_main_q24",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1998_main_q08",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1998_main_q08",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "D",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1999_main_q08",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1999_main_q08",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "C",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1999_main_q09",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1999_main_q09",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "B",
+      "map_method": "sequential_year_index",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_1999_main_q23",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2000_main_q22",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2000_main_q23",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2001_main_q21",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2002_main_q21",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2002_main_q22",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2002_main_q23",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2003_main_q26",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2003_main_q30",
+      "message": "未匹配解析且题内无解析"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2005_main_q14",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2005_main_q14",
+      "message": "标准答案不在选项标签中，疑似 OCR 选项标号缺失",
+      "answer": "D",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2009_main_q05",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2010_main_q06",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2010_main_q06",
+      "message": "标准答案不在选项标签中，疑似 OCR 选项标号缺失",
+      "answer": "D",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2014_main_q03",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2014_main_q03",
+      "message": "标准答案不在选项标签中，疑似 OCR 选项标号缺失",
+      "answer": "D",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2015_main_q04",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2020_main_q03",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2021_main_q05",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2021_main_q05",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "C",
+      "map_method": "similarity_fallback:0.140",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q01",
+      "message": "题干已从内置解析恢复，建议人工抽查",
+      "originalStem": "(1)设 $\\operatorname* { l i m } _ { x \\to 1 } { \\frac { f ( x ) } { \\ln x } } = 1$ ，则 ） Z\n\n(B x→1\n\n( D",
+      "recoveredPreview": "1 设 $\\lim_{x\\to 1}\\frac{f(x)}{\\ln x} = 1$ ，则（ (A) $f(1) = 0$ . (B) $\\lim_{x\\to 1}f(x) = 0.$ $\\mathrm{(C)}f^{\\prime}(1) = 1.$ (D) $\\lim_{x\\to 1}f'(x) = 1.$ 答案 B. 分析 本题主要考查极限与导数的概念 本"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q01",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q01",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "B",
+      "map_method": "year_question_no",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q01",
+      "message": "命中 OCR/乱码风险模式",
+      "hits": [
+        "ocr_spaced_function_names"
+      ],
+      "preview": "(1)设 $\\operatorname* { l i m } _ { x \\to 1 } { \\frac { f ( x ) } { \\ln x } } = 1$ ，则 ） Z (B x→1 ( D"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q02",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q02",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "B",
+      "map_method": "year_question_no",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q03",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q03",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "D",
+      "map_method": "year_question_no",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q04",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q04",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q04",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "A",
+      "map_method": "year_question_no",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q05",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q05",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "A",
+      "map_method": "year_question_no",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q06",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q06",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q06",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "C",
+      "map_method": "year_question_no",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q07",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q07",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "C",
+      "map_method": "year_question_no",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q08",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q08",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "C",
+      "map_method": "year_question_no",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q09",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q09",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q09",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "A",
+      "map_method": "year_question_no",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q10",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2022_main_q10",
+      "message": "低可信解析中存在答案，未用于自动判分",
+      "answer": "D",
+      "map_method": "year_question_no",
+      "quality_status": "manual_check"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2023_main_q05",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2023_main_q06",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2023_main_q06",
+      "message": "标准答案不在选项标签中，疑似 OCR 选项标号缺失",
+      "answer": "D",
+      "labels": [
+        "C"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2023_main_q07",
+      "message": "题干已从内置解析恢复，建议人工抽查",
+      "originalStem": "7. 已知向量 α1 = 2 , α2 = 1 ， 若 $\\gamma$ 既可由 $\\alpha _ { 1 } , \\alpha _ { 2 }$ 线性表示，3 1也可由 $\\beta _ { 1 } , \\beta _ { 2 }$ 线性表示, 则 $\\gamma =$ (\n\n, k ∈ R.",
+      "recoveredPreview": "(7) 已知向量 $\\alpha_{1} = \\begin{pmatrix} 1 \\\\ 2 \\\\ 3 \\end{pmatrix}$ , $\\alpha_{2} = \\begin{pmatrix} 2 \\\\ 1 \\\\ 1 \\end{pmatrix}$ , $\\beta_{1} = \\begin{pmatrix} 2 \\\\ 5 \\\\ 9 \\end{pmatrix"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2023_main_q07",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2023_main_q07",
+      "message": "选择题未识别到可信标准答案",
+      "labels": [
+        "A"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2023_main_q08",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_q03",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_q03",
+      "message": "标准答案不在选项标签中，疑似 OCR 选项标号缺失",
+      "answer": "A",
+      "labels": [
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_q04",
+      "message": "命中 OCR/乱码风险模式",
+      "hits": [
+        "ocr_spaced_function_names"
+      ],
+      "preview": "【4】设函数 $f ( x )$ 在区间( 1,1) − 内有定义， $\\operatorname* { l i m } _ { x \\to 0 } f ( x ) = 0$ ，则 （A）当 $\\operatorname* { l i m } _ { x \\to 0 } { \\frac { f ( x ) } { x } } = m$ 时， $f ^ { \\"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_q09",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_q12",
+      "message": "题干已从内置解析恢复，建议人工抽查",
+      "originalStem": "12.",
+      "recoveredPreview": "【12】设 $z = f ( u , \\nu )$ 有二阶连续导数，且df 1,1 （ ） 3d 4d u v= + ，若 $y = f ( \\cos x , 1 + x ^ { 2 } )$ ，则2d x 0x="
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_q17",
+      "message": "题干已从内置解析恢复，建议人工抽查",
+      "originalStem": "17.",
+      "recoveredPreview": "【17】 （本题满分 10分） 已知平面区域 $D = \\{ ( x , y ) { \\big | } { \\sqrt { 1 - y ^ { 2 } } } \\leq x \\leq 1 , - 1 \\leq y \\leq 1 \\}$ ,计算 $\\iint _ { D } \\frac { x } { \\sqrt { x ^ { 2 } + y ^ { 2 }"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_q19",
+      "message": "题干已从内置解析恢复，建议人工抽查",
+      "originalStem": "19.",
+      "recoveredPreview": "【19】 （本题满分 12分） 设 $f ( x )$ 二阶可导， $f ^ { \\prime } ( 0 ) = f ^ { \\prime } ( 0 ) , \\left| f ^ { \\prime \\prime } ( x ) \\right| \\le 1$ ，证： （1） （2）"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_q21",
+      "message": "题干已从内置解析恢复，建议人工抽查",
+      "originalStem": "21.",
+      "recoveredPreview": "【21】 （本题满分 12分） 已知数列 $\\{ x _ { n } \\} , \\{ y _ { n } \\} , \\{ z _ { n } \\}$ 满足 $x _ { 0 } = - 1 , y _ { 0 } = 0 , z _ { 0 } = 2$ $x _ { 0 } = - 1$ , 且 $\\left\\{ \\begin{array} { c } {"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_with_answers_q04",
+      "message": "命中 OCR/乱码风险模式",
+      "hits": [
+        "ocr_spaced_function_names"
+      ],
+      "preview": "【4】设函数 $f ( x )$ 在区间( 1,1) − 内有定义， $\\operatorname* { l i m } _ { x \\to 0 } f ( x ) = 0$ ，则 （A）当 $\\operatorname* { l i m } _ { x \\to 0 } { \\frac { f ( x ) } { x } } = m$ 时， $f ^ { \\"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_with_answers_q09",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_with_answers_q11",
+      "message": "命中 OCR/乱码风险模式",
+      "hits": [
+        "ocr_spaced_function_names"
+      ],
+      "preview": "【11】若 $\\operatorname* { l i m } _ { x \\to 0 } { \\frac { \\left( 1 + a x ^ { 2 } \\right) ^ { \\sin x } - 1 } { x ^ { 3 } } } { \\mathrm { = } } 6$ ，则a = . 3x 【答案】6"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_with_answers_q12",
+      "message": "题干已从内置解析恢复，建议人工抽查",
+      "originalStem": "12.",
+      "recoveredPreview": "【12】设 $z = f ( u , \\nu )$ 有二阶连续导数，且df 1,1 （ ） 3d 4d u v= + ，若 $y = f ( \\cos x , 1 + x ^ { 2 } )$ ，则2d x 0x="
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_with_answers_q14",
+      "message": "题干已从内置解析恢复，建议人工抽查",
+      "originalStem": "14.",
+      "recoveredPreview": "【14】微分方程 $y ^ { \\prime } { = } \\frac { 1 } { \\left( x + y \\right) ^ { 2 } }$ ，满足条件 $y ( 1 ) = 0$ 的解为"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_with_answers_q17",
+      "message": "题干已从内置解析恢复，建议人工抽查",
+      "originalStem": "17.",
+      "recoveredPreview": "【17】 （本题满分 10分） 已知平面区域 $D = \\{ ( x , y ) { \\big | } { \\sqrt { 1 - y ^ { 2 } } } \\leq x \\leq 1 , - 1 \\leq y \\leq 1 \\}$ ,计算 $\\iint _ { D } \\frac { x } { \\sqrt { x ^ { 2 } + y ^ { 2 }"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_with_answers_q19",
+      "message": "题干已从内置解析恢复，建议人工抽查",
+      "originalStem": "19.",
+      "recoveredPreview": "【19】 （本题满分 12分） 设 $f ( x )$ 二阶可导， $f ^ { \\prime } ( 0 ) = f ^ { \\prime } ( 0 ) , \\left| f ^ { \\prime \\prime } ( x ) \\right| \\le 1$ ，证： （1） （2）"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_with_answers_q21",
+      "message": "题干已从内置解析恢复，建议人工抽查",
+      "originalStem": "21.",
+      "recoveredPreview": "【21】 （本题满分 12分） 已知数列 $\\{ x _ { n } \\} , \\{ y _ { n } \\} , \\{ z _ { n } \\}$ 满足 $x _ { 0 } = - 1 , y _ { 0 } = 0 , z _ { 0 } = 2$ $x _ { 0 } = - 1$ , 且 $\\left\\{ \\begin{array} { c } {"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_ref_answers_q03",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_ref_answers_q03",
+      "message": "标准答案不在选项标签中，疑似 OCR 选项标号缺失",
+      "answer": "A",
+      "labels": [
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_ref_answers_q04",
+      "message": "命中 OCR/乱码风险模式",
+      "hits": [
+        "ocr_spaced_function_names"
+      ],
+      "preview": "【4】设函数 $f ( x )$ 在区间( 1,1) − 内有定义， $\\operatorname* { l i m } _ { x \\to 0 } f ( x ) = 0$ ，则 （A）当 $\\operatorname* { l i m } _ { x \\to 0 } { \\frac { f ( x ) } { x } } = m$ 时， $f ^ { \\"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_ref_answers_q08",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A",
+        "B",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_ref_answers_q09",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "C",
+        "D"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2024_main_ref_answers_q11",
+      "message": "命中 OCR/乱码风险模式",
+      "hits": [
+        "ocr_spaced_function_names"
+      ],
+      "preview": "【11】若 $\\operatorname* { l i m } _ { x \\to 0 } { \\frac { \\left( 1 + a x ^ { 2 } \\right) ^ { \\sin x } - 1 } { x ^ { 3 } } } { \\mathrm { = } } 6$ ，则a = . 3x 【答案】6"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2025_main_q02",
+      "message": "命中 OCR/乱码风险模式",
+      "hits": [
+        "ocr_spaced_function_names"
+      ],
+      "preview": "2．已知级数： $\\textcircled { 1 } \\sum _ { n = 1 } ^ { \\infty } \\sin \\frac { n ^ { 3 } \\pi } { n ^ { 2 } + 1 }$ ； $\\textcircled { 2 } \\sum _ { n = 1 } ^ { \\infty } ( - 1 ) ^ { n } \\left("
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2025_main_q03",
+      "message": "命中 OCR/乱码风险模式",
+      "hits": [
+        "ocr_spaced_function_names"
+      ],
+      "preview": "3．设函数 $f(x)$ 在区间 $(0,+\\infty)$ 上可导，则 A．当 $\\lim_{x\\to+\\infty} f(x)$ 存在时，$\\lim_{x\\to+\\infty} f'(x)$ 存在． B．当 $\\lim_{x\\to+\\infty} f'(x)$ 存在时，$\\lim_{x\\to+\\infty} f(x)$ 存在． C．当 $\\lim_{x\\"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2025_main_q09",
+      "message": "选择题选项标签可能不完整",
+      "labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2025_main_q09",
+      "message": "标准答案不在选项标签中，疑似 OCR 选项标号缺失",
+      "answer": "C",
+      "labels": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2025_main_q11",
+      "message": "命中 OCR/乱码风险模式",
+      "hits": [
+        "ocr_spaced_function_names"
+      ],
+      "preview": "11． $\\operatorname* { l i m } _ { x \\to 0 ^ { + } } { \\frac { x ^ { x } - 1 } { \\ln x \\cdot \\ln ( 1 - x ) } } = \\qquad \\cdot$ 【答案】-1 【解析】 $$ \\lim _ {x \\rightarrow 0 ^ {+}} \\frac {e"
+    },
+    {
+      "severity": "P2",
+      "id": "math1_2025_main_q19",
+      "message": "未匹配解析且题内无解析"
+    }
+  ]
+}

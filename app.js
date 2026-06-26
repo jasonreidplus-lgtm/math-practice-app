@@ -42,6 +42,31 @@ const questionTypes = [
   { key: "essay", label: "大题", short: "大题", icon: "∑" }
 ];
 
+const questionContentOverrides = {
+  math1_2025_main_q10: {
+    quality_status: "ok",
+    content_md: `10．设 $X_1,X_2,\\cdots,X_n$ 为来自正态总体 $N(\\mu,2)$ 的简单随机样本。记 $\\overline X=\\frac1n\\sum_{i=1}^n X_i$，$Z_\\alpha$ 表示标准正态分布的上侧 $\\alpha$ 分位数。假设检验问题 $H_0:\\mu\\leq 1, H_1:\\mu>1$ 的显著性水平为 $\\alpha$ 的检验的拒绝域为
+
+A． $\\left\\{(X_1,X_2,\\cdots,X_n)\\mid \\overline X>1+\\frac{2}{n}Z_\\alpha\\right\\}$.
+
+B． $\\left\\{(X_1,X_2,\\cdots,X_n)\\mid \\overline X>1+\\frac{\\sqrt2}{n}Z_\\alpha\\right\\}$.
+
+C． $\\left\\{(X_1,X_2,\\cdots,X_n)\\mid \\overline X>1+\\frac{2}{\\sqrt n}Z_\\alpha\\right\\}$.
+
+D． $\\left\\{(X_1,X_2,\\cdots,X_n)\\mid \\overline X>1+\\sqrt{\\frac2n}Z_\\alpha\\right\\}$.
+
+【答案】D
+
+【解析】当 $\\mu=1$ 时，$\\frac{\\overline X-1}{\\sqrt{2/n}}\\sim N(0,1)$。右侧检验在显著性水平 $\\alpha$ 下的拒绝域为
+
+$$
+\\frac{\\overline X-1}{\\sqrt{2/n}}>Z_\\alpha,
+$$
+
+即 $\\overline X>1+\\sqrt{\\frac2n}Z_\\alpha$。`
+  }
+};
+
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
@@ -67,25 +92,35 @@ function init() {
   startTimer();
 }
 
-function enrichQuestion(question) {
+function enrichQuestion(rawQuestion) {
+  const question = applyQuestionOverride(rawQuestion);
   const content = question.content_md || "";
   const inline = splitInlineContent(content);
-  const type = inferQuestionType(question, inline.question);
+  const solution = solutionForQuestionId(question.question_id);
+  const recoveredStem = recoverStemFromSolution(question, inline, solution);
+  const stem = recoveredStem || inline.question;
+  const type = inferQuestionType(question, stem);
   return {
     ...question,
     year: Number(question.year),
     question_no: Number(question.question_no),
-    question_stem_md: inline.question,
+    question_stem_md: stem,
     inline_solution_md: inline.solution,
+    stem_recovered_from_solution: Boolean(recoveredStem),
     question_type: type,
     inferred_tags: inferTags(content),
-    search_text: `${question.year} ${question.paper} 第${question.question_no}题 ${content} ${typeText(type)}`.toLowerCase()
+    search_text: `${question.year} ${question.paper} 第${question.question_no}题 ${content} ${stem} ${typeText(type)}`.toLowerCase()
   };
+}
+
+function applyQuestionOverride(question) {
+  const override = questionContentOverrides[question.question_id];
+  return override ? { ...question, ...override } : question;
 }
 
 function splitInlineContent(content) {
   const normalized = String(content || "").replace(/\r\n/g, "\n").trim();
-  const marker = normalized.search(/(?:^|\n)\s*(?:【答案】|答案\s*[:：]|【解析】|解析\s*[:：]|【解】|解\s*[:：])/m);
+  const marker = normalized.search(/(?:【答案】|【解析】|【解】|(?:^|\n)\s*(?:答案\s*[:：]|解析\s*[:：]|解\s*[:：]))/m);
   if (marker < 0) {
     const solveMarker = normalized.search(/(?:^|\n)\s*解[:：]/m);
     if (solveMarker < 0) return { question: normalized, solution: "" };
@@ -100,26 +135,73 @@ function splitInlineContent(content) {
   };
 }
 
+function recoverStemFromSolution(question, inline, solution) {
+  const shouldRecoverChoiceOptions = inferQuestionTypeFromStructure(question, inline.question) === "choice" &&
+    choiceLabels(inline.question).length === 0;
+  if (!needsStemRecovery(inline.question) && !shouldRecoverChoiceOptions) return "";
+  if (!isUsableSolutionForStemRecovery(solution)) return "";
+  const recovered = splitInlineContent(solution.content_md).question.trim();
+  if (!needsStemRecovery(recovered) && recovered.length >= 20) return recovered;
+  return "";
+}
+
+function needsStemRecovery(stem) {
+  const text = String(stem || "").replace(/^#+\s*/gm, "").replace(/\s+/g, " ").trim();
+  if (!text) return true;
+  if (/^["'【（(]?\d{1,2}["'】）).．、]?\s*$/.test(text)) return true;
+  return text.length < 12;
+}
+
 function inferQuestionType(question, stem) {
-  if (hasChoiceOptions(stem)) return "choice";
+  const structuralType = inferQuestionTypeFromStructure(question, stem);
+  if (structuralType) return structuralType;
   if (isBlankQuestion(question, stem)) return "blank";
   return "essay";
 }
 
+function inferQuestionTypeFromStructure(question, stem) {
+  const recentType = recentQuestionType(question);
+  if (recentType) return recentType;
+  if (hasChoiceOptions(stem) || hasChoiceSectionHeading(question, stem)) return "choice";
+  return "";
+}
+
 function hasChoiceOptions(stem) {
+  return choiceLabels(stem).length >= 3;
+}
+
+function choiceLabels(stem) {
   const text = String(stem || "");
   const labels = new Set();
-  const optionRe = /(?:^|\n|\s)(?:[（(]\s*([A-D])\s*[）)]|([A-D])\s*[．.、])/g;
+  const optionRe = /(?:^|\n|\s{2,})\s*\$?\s*(?:(?:\\left\s*)?[（(]\s*(?:\\mathrm\s*\{\s*)?([A-D])(?:\s*\})?\s*(?:\\right\s*)?[）)]|\\mathrm\s*\{\s*[（(]\s*([A-D])\s*[）)]\s*\}|(?:\\mathrm\s*\{\s*)?([A-D])(?:\s*\})?\s*[．.、])/g;
   let match;
   while ((match = optionRe.exec(text))) {
-    labels.add(match[1] || match[2]);
+    labels.add(match[1] || match[2] || match[3]);
   }
-  return labels.size >= 3;
+  return Array.from(labels).sort();
+}
+
+function hasChoiceSectionHeading(question, stem) {
+  const text = `${question.paper || ""}\n${stem || ""}`;
+  const headingIndex = text.search(/(?:^|\n)\s*#*\s*(?:[一二三四五六七八九十]+[、.．]|\d+[、.．)]|[（(]\d+[）)])?\s*选择题/);
+  if (headingIndex < 0) return false;
+  const questionIndex = text.search(/(?:^|\n)\s*(?:[（(]\s*\d{1,2}\s*[）)]|\d{1,2}[.．、])/);
+  return questionIndex < 0 || headingIndex < questionIndex;
 }
 
 function isBlankQuestion(question, stem) {
   const text = `${question.paper || ""}\n${stem || ""}`;
   return /填空题|_{3,}|____|underline|\\underline|\\qquad|应填|填\s*[:：]/.test(text);
+}
+
+function recentQuestionType(question) {
+  const year = Number(question.year);
+  const no = Number(question.question_no);
+  if (year < 2021) return "";
+  if (no >= 1 && no <= 10) return "choice";
+  if (no >= 11 && no <= 16) return "blank";
+  if (no >= 17) return "essay";
+  return "";
 }
 
 function inferTags(content) {
@@ -535,11 +617,16 @@ function chooseOption(letter) {
 }
 
 function correctChoice(question) {
-  const candidates = [
+  const solution = currentSolution(question);
+  return extractChoiceAnswer(
     question.inline_solution_md || "",
-    currentSolution(question)?.content_md || "",
+    isTrustedSolution(solution) ? solution.content_md || "" : "",
     question.content_md || ""
-  ].join("\n");
+  );
+}
+
+function extractChoiceAnswer(...texts) {
+  const candidates = texts.join("\n");
   const match = candidates.match(/(?:【答案】|答案\s*[:：]?)\s*[（(]?\s*([A-D])\s*[）)]?/i);
   return normalizeChoice(match?.[1] || "");
 }
@@ -731,7 +818,7 @@ function renderAuditDetail(question) {
   $("#auditTitle").textContent = `${question.year} 数学一 ${question.paper} 第${pad2(question.question_no)}题`;
   $("#auditRiskLine").textContent = risks.join(" / ") || "人工校对记录";
   $("#auditRiskLine").classList.remove("hidden");
-  $("#auditQuestionBody").innerHTML = renderMarkdown(question.content_md || "", question);
+  $("#auditQuestionBody").innerHTML = renderMarkdown(question.question_stem_md || question.content_md || "", question);
   $("#auditSolutionBody").innerHTML = solution
     ? renderAuditSolution(solution)
     : `<div class="empty-state">本题暂未匹配到题目级解析。可以在右下方先补写解析草稿。</div>`;
@@ -775,6 +862,7 @@ function auditRiskLabels(question, record = {}) {
   const labels = [];
   if (!solution) labels.push("待补写");
   if (question.quality_status === "manual_check") labels.push("题目源需校对");
+  if (question.stem_recovered_from_solution) labels.push("题干由解析恢复");
   if (solution?.quality_status === "manual_check") labels.push("解析需校对");
   if (record.manualFlag) labels.push("用户标记需校对");
   if (record.auditStatus) labels.push(auditStatusText(record.auditStatus));
@@ -1051,9 +1139,23 @@ function currentQuestion() {
 }
 
 function currentSolution(question = currentQuestion()) {
-  if (!question || !window.SOLUTION_BY_ID) return null;
-  if (window.SOLUTION_BY_ID?.[question.question_id]) return window.SOLUTION_BY_ID[question.question_id];
-  return null;
+  return solutionForQuestionId(question?.question_id);
+}
+
+function solutionForQuestionId(questionId) {
+  if (!questionId || !window.SOLUTION_BY_ID) return null;
+  return window.SOLUTION_BY_ID?.[questionId] || null;
+}
+
+function isTrustedSolution(solution) {
+  if (!solution?.content_md) return false;
+  if (solution.quality_status === "manual_check") return false;
+  return !/^similarity_fallback/i.test(solution.map_method || "");
+}
+
+function isUsableSolutionForStemRecovery(solution) {
+  if (!solution?.content_md) return false;
+  return !/^similarity_fallback/i.test(solution.map_method || "");
 }
 
 function currentRecord(create = true) {
@@ -1190,6 +1292,7 @@ function auditStatusBadge(status) {
 function hasManualRisk(question, record = {}) {
   const solution = currentSolution(question);
   return question?.quality_status === "manual_check" ||
+    question?.stem_recovered_from_solution ||
     !!record.manualFlag ||
     solution?.quality_status === "manual_check";
 }
